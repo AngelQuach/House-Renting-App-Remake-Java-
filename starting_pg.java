@@ -7,8 +7,8 @@ public class starting_pg extends JFrame implements ActionListener{
 	//global var.
 	JLayeredPane layeredPane;
 	JLabel fTitle, label_bg;
-	JPanel panel_top, panel_bg, panel_bot;
-	JButton icon, start, setting;
+	JPanel panel_bg;
+	JButton icon, start, exit;
 	ImageIcon icon_img, starting_page;
 	Font title_f = new Font("Comic Sans MS", Font.BOLD, 30);
 	Font txt_f = new Font("Comic Sans MS", Font.BOLD, 15);
@@ -44,21 +44,21 @@ public class starting_pg extends JFrame implements ActionListener{
 		start.addActionListener(this);
 		start.setFont(txt_f);
 		start.setBounds(100, 450, 175, 50);
-		setting = new JButton("Settings");
-		setting.addActionListener(this);
-		setting.setFont(txt_f);
-		setting.setBounds(375, 450, 175, 50);
+		exit = new JButton("Exit");
+		exit.addActionListener(this);
+		exit.setFont(txt_f);
+		exit.setBounds(375, 450, 175, 50);
 				
 	//put them tgt
 		layeredPane.add(fTitle, JLayeredPane.MODAL_LAYER);
 		layeredPane.add(icon, JLayeredPane.MODAL_LAYER);
 		layeredPane.add(start, JLayeredPane.MODAL_LAYER);
-		layeredPane.add(setting, JLayeredPane.MODAL_LAYER);
+		layeredPane.add(exit, JLayeredPane.MODAL_LAYER);
 	
 	//set window
 		this.setLayeredPane(layeredPane);
 		this.setSize(650, 650);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
 	
@@ -73,6 +73,20 @@ public class starting_pg extends JFrame implements ActionListener{
 		if(choice == icon) {
 			//pop-up window for introducing icon
 			icon_Intro icon_win = new icon_Intro();
+		}
+		
+		//if start is pressed
+		else if(choice == start) {
+			//new window for game
+			//2023.5.30 - Unsure whether it is better to open a new one or change current one
+			//				-> to be determined
+			this.setVisible(false);
+			game_Main game_win = new game_Main(this);
+		}
+		
+		//if exit is pressed
+		else {
+			System.exit(0);
 		}
 	}
 	
