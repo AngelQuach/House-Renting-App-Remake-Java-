@@ -4,10 +4,12 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
-import javax.swing.*;
-
-public class sarah_win extends JFrame implements ActionListener{
+class sarah_win extends JFrame implements ActionListener{
 	//global var.
+	//object of user
+	user user_obj = new user();
+	//indicator for user window
+	int user_indicator = 0;
 	//Sarah avatar
 	String s_name;
 	JLabel s_name_l, s_avatar_l;
@@ -28,12 +30,16 @@ public class sarah_win extends JFrame implements ActionListener{
 
 	
 	//constructor
-	public sarah_win (String context, int indicator) {
+	public sarah_win (user user_obj, String context, int indicator) {
+		//store the user object
+		this.user_obj.copy(user_obj);
 		//store context and indicator
 		s_context = context;
 		s_indicator = indicator;
 		
 		//set up the shared parts
+			//setup window
+			this.setTitle("Conversation Ongoing...");
 			//setup layers
 			layeredPane = new JLayeredPane();
 		
@@ -43,53 +49,66 @@ public class sarah_win extends JFrame implements ActionListener{
 			s_avatar_l = new JLabel(s_avatar_img);
 			s_avatar_l.setBounds(10, 10, s_avatar_img.getIconWidth(), s_avatar_img.getIconHeight());
 
-		//if it is regarding welcoming plot (1st sentence)
-		if(context == "welcome" && indicator == 0) {
-			//Sarah's name
-			s_name = "Lead";
+		//if it is regarding welcoming plot
+			if(context == "welcome") {
+				//1st sentence
+				if(indicator == 0) {
+					//Sarah's name
+					s_name = "Lead";
 
-			//Sarah's words
-			s_txt_a = new JTextArea("\n    Hi, trainee! Welcome to Best Real Estate! I will "
-					+ "\n be your lead for the upcoming 7 days.");
-		}
-		//2nd sentence
-		else if(context == "welcome" && indicator == 1) {
-			//Sarah's name
-			s_name = "Lead";
+					//Sarah's words
+					s_txt_a = new JTextArea("\n    Hi, trainee! Welcome to Best Real Estate! I will "
+							+ "\n be your lead for the upcoming 7 days.");
+				}
+				//2nd sentence
+				else if(indicator == 1) {
+					//Sarah's name
+					s_name = "Lead";
 
-			//Sarah's words
-			s_txt_a = new JTextArea("\n    Wait what?! You don't know why you are here?"
-					+ "\n Well... You're a trainee real estate agent who is "
-					+ "\n on a 7-day training session.");
-		}
-		//3rd sentence
-		else if(context == "welcome" && indicator == 2) {
-			//Sarah's name
-			s_name = "Lead";
+					//Sarah's words
+					s_txt_a = new JTextArea("\n    Wait what?! You don't know why you are here?"
+							+ "\n Well... You're a trainee real estate agent who is "
+							+ "\n on a 7-day training session.");
+				}
+				//3rd sentence
+				else if(indicator == 2) {
+					//Sarah's name
+					s_name = "Lead";
 
-			//Sarah's words
-			s_txt_a = new JTextArea("\n    By the end of this week, you will be evaluated. "
-					+ "\n If you pass, you will be one of us, agents working "
-					+ "\n at 1st real estate company in the country.");
-		}
-		//4th sentence (add variety by changing the button)
-		else if(context == "welcome" && indicator == 3) {
-			//Sarah's name
-			s_name = "Lead";
+					//Sarah's words
+					s_txt_a = new JTextArea("\n    By the end of this week, you will be evaluated. "
+							+ "\n If you pass, you will be one of us, agents working "
+							+ "\n at 1st real estate company in the country.");
+				}
+				//4th sentence (add variety by changing the button)
+				else if(indicator == 3) {
+					//Sarah's name
+					s_name = "Lead";
 
-			//Sarah's words
-			s_txt_a = new JTextArea("\n    Alternatively, if you fail...you will still get paid "
-					+ "\n based on your performance.");
-		}
-		//5th sentence (when Sarah finally share name)
-		else if(context == "welcome" && indicator == 4) {
-			//Sarah's name
-			s_name = "Sarah";
+					//Sarah's words
+					s_txt_a = new JTextArea("\n    Alternatively, if you fail...you will still get paid "
+							+ "\n based on your performance.");
+				}
+				//5th sentence (when Sarah finally share name)
+				else if(indicator == 4) {
+					//Sarah's name
+					s_name = "Sarah";
 
-			//Sarah's words
-			s_txt_a = new JTextArea("\n    Nice! I can see that you are more than ready to "
-					+ "\n start your 1st day of work! I am Sarah, your lead.");
-		}
+					//Sarah's words
+					s_txt_a = new JTextArea("\n    Nice! I can see that you are more than ready to "
+							+ "\n start your 1st day of work! I am Sarah, your lead.");
+				}
+				//after collecting user name --> last dialog before starting instruction
+				else if(indicator == 5) {
+					//Sarah's name
+					s_name = "Sarah";
+
+					//Sarah's words
+					s_txt_a = new JTextArea("\n    Nice to see you, " + this.user_obj.getName() + "!"
+							+ "\n    Now you can follow the instruction on the PC"
+							+ "\n and start your first day of work!");
+				}
+			}
 		
 		//Sarah's name continue
 		s_name_l = new JLabel(s_name);
@@ -142,9 +161,21 @@ public class sarah_win extends JFrame implements ActionListener{
 				//once s_indicator == 4 --> time for users to name themselves
 				if(s_context == "welcome" && s_indicator < 4) {
 					s_indicator++;
-					sarah_win welcome_win2 = new sarah_win("welcome", s_indicator);
+					sarah_win welcome_win2 = new sarah_win(this.user_obj, "welcome", s_indicator);
+				}
+				//now it is time for user to name themselves
+				else if(s_context == "welcome" && s_indicator == 4){
+					user_win welcome_user1 = new user_win(this.user_obj, "welcome", user_indicator);
+					
+					//update user information once it is updated
+					user_obj.copy(welcome_user1.getUser());
 				}
 				dispose();
 			}
+		}
+	
+	//getter
+		user getUser() {
+			return user_obj;
 		}
 }
